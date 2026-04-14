@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d5aa0"/>
+      <stop offset="100%" style="stop-color:#1a3a6e"/>
+    </linearGradient>
+  </defs>
+  <!-- Full-bleed background -->
+  <rect x="0" y="0" width="256" height="256" fill="url(#bg)"/>
+  <!-- Shield shape -->
+  <path d="M128 36 L196 68 L196 136 Q196 192 128 224 Q60 192 60 136 L60 68 Z" fill="none" stroke="#ffffff" stroke-width="5" opacity="0.9"/>
+  <!-- Git merge icon -->
+  <circle cx="104" cy="96" r="12" fill="#4fc3f7"/>
+  <circle cx="152" cy="96" r="12" fill="#4fc3f7"/>
+  <circle cx="128" cy="156" r="14" fill="#81c784"/>
+  <!-- Merge lines -->
+  <line x1="104" y1="108" x2="128" y2="142" stroke="#4fc3f7" stroke-width="5" stroke-linecap="round"/>
+  <line x1="152" y1="108" x2="128" y2="142" stroke="#4fc3f7" stroke-width="5" stroke-linecap="round"/>
+  <!-- Check mark in bottom circle -->
+  <polyline points="116,156 124,166 140,146" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
