@@ -5,6 +5,18 @@ All notable changes to the MergeGuard extension will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] — 2026-04-14
+
+### Fixed
+
+- Fix lint errors: replace `while (true)` with `for (;;)` in SCM pagination loops; remove 15 unused imports/variables
+- Fix CI test failure on non-Windows: use `execFileSync` to avoid shell escaping of `^` in `HEAD^{tree}`
+
+### Added
+
+- Watch `.git/packed-refs` and `.git/FETCH_HEAD` for more reliable auto-scan after fetch/pull
+- Hook into VS Code's built-in Git extension state changes for automatic scan on UI-driven git operations
+
 ## [1.0.1] — 2026-04-14
 
 ### Fixed
