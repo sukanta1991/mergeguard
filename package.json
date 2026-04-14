@@ -1,0 +1,314 @@
+{
+  "name": "mergeguard",
+  "displayName": "Merge Guard — PR Conflict Predictor",
+  "description": "Predict merge conflicts before they happen. Continuously monitors branches and warns about potential conflicts using git merge-tree simulation.",
+  "version": "1.0.1",
+  "publisher": "SukantaSaha",
+  "author": "Sukanta Saha",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "extensionKind": ["workspace"],
+  "categories": ["Other", "SCM Providers"],
+  "keywords": [
+    "git",
+    "merge",
+    "conflict",
+    "prediction",
+    "branch",
+    "pull request",
+    "merge conflict",
+    "diff",
+    "merge-tree",
+    "risk"
+  ],
+  "galleryBanner": {
+    "color": "#1e1e2e",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sukanta1991/mergeguard"
+  },
+  "icon": "images/icon.png",
+  "l10n": "./l10n",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "mergeguard.scan",
+        "title": "Scan Current Branch for Conflicts",
+        "category": "MergeGuard",
+        "icon": "$(search)"
+      },
+      {
+        "command": "mergeguard.scanAll",
+        "title": "Scan All Tracked Branches",
+        "category": "MergeGuard",
+        "icon": "$(search-refresh)"
+      },
+      {
+        "command": "mergeguard.configure",
+        "title": "Configure Tracked Branches",
+        "category": "MergeGuard",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "mergeguard.toggleAutoScan",
+        "title": "Toggle Auto-Scan",
+        "category": "MergeGuard",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "mergeguard.previewConflict",
+        "title": "Preview Conflict",
+        "category": "MergeGuard",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "mergeguard.threeWayDiff",
+        "title": "Three-Way Diff",
+        "category": "MergeGuard",
+        "icon": "$(diff-multiple)"
+      },
+      {
+        "command": "mergeguard.openDashboard",
+        "title": "Open Risk Dashboard",
+        "category": "MergeGuard",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "mergeguard.suggestMergeOrder",
+        "title": "Suggest Merge Order",
+        "category": "MergeGuard",
+        "icon": "$(list-ordered)"
+      },
+      {
+        "command": "mergeguard.dismissConflict",
+        "title": "Dismiss Conflict",
+        "category": "MergeGuard",
+        "icon": "$(close)"
+      },
+      {
+        "command": "mergeguard.sortConflicts",
+        "title": "Sort Conflicts",
+        "category": "MergeGuard",
+        "icon": "$(sort-precedence)"
+      },
+      {
+        "command": "mergeguard.toggleHighRiskFilter",
+        "title": "Toggle High-Risk Filter",
+        "category": "MergeGuard",
+        "icon": "$(filter)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mergeguard",
+          "title": "MergeGuard",
+          "icon": "$(git-merge)"
+        }
+      ]
+    },
+    "views": {
+      "mergeguard": [
+        {
+          "id": "mergeguard.conflictsView",
+          "name": "Predicted Conflicts",
+          "icon": "$(warning)",
+          "contextualTitle": "MergeGuard"
+        },
+        {
+          "id": "mergeguard.branchesView",
+          "name": "Tracked Branches",
+          "icon": "$(git-branch)",
+          "contextualTitle": "MergeGuard"
+        },
+        {
+          "id": "mergeguard.dashboardView",
+          "name": "Dashboard",
+          "type": "webview",
+          "icon": "$(dashboard)",
+          "contextualTitle": "MergeGuard"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "mergeguard.scanAll",
+          "when": "view == mergeguard.conflictsView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "mergeguard.sortConflicts",
+          "when": "view == mergeguard.conflictsView",
+          "group": "navigation@2"
+        },
+        {
+          "command": "mergeguard.toggleHighRiskFilter",
+          "when": "view == mergeguard.conflictsView",
+          "group": "navigation@3"
+        },
+        {
+          "command": "mergeguard.openDashboard",
+          "when": "view == mergeguard.conflictsView",
+          "group": "navigation@4"
+        },
+        {
+          "command": "mergeguard.configure",
+          "when": "view == mergeguard.branchesView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "mergeguard.previewConflict",
+          "when": "viewItem == mergeguard.file",
+          "group": "inline@1"
+        },
+        {
+          "command": "mergeguard.threeWayDiff",
+          "when": "viewItem == mergeguard.file",
+          "group": "inline@2"
+        },
+        {
+          "command": "mergeguard.dismissConflict",
+          "when": "viewItem == mergeguard.file",
+          "group": "inline@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MergeGuard",
+      "properties": {
+        "mergeguard.trackedBranches": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["main", "master", "develop"],
+          "description": "Branches to monitor for potential merge conflicts."
+        },
+        "mergeguard.autoScanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically scan for conflicts when a file is saved."
+        },
+        "mergeguard.autoScanInterval": {
+          "type": "number",
+          "default": 300,
+          "minimum": 0,
+          "description": "Seconds between periodic background scans. Set to 0 to disable."
+        },
+        "mergeguard.debounceDelay": {
+          "type": "number",
+          "default": 2000,
+          "minimum": 500,
+          "description": "Milliseconds to wait after a save before triggering a scan."
+        },
+        "mergeguard.showInlineDecorations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Highlight predicted conflict regions in the editor."
+        },
+        "mergeguard.showInProblemsPanel": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show predicted conflicts as warnings in the Problems panel."
+        },
+        "mergeguard.showCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show CodeLens annotations above conflict regions in the editor."
+        },
+        "mergeguard.notificationLevel": {
+          "type": "string",
+          "enum": ["all", "high", "badge", "silent"],
+          "default": "all",
+          "enumDescriptions": [
+            "Toast for every new conflict",
+            "Toast only for high-risk new conflicts",
+            "Update badge only, no toast",
+            "No notifications at all"
+          ],
+          "description": "Control when conflict notifications are shown."
+        },
+        "mergeguard.riskThreshold": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "default": "low",
+          "description": "Minimum risk level to display. Conflicts below this threshold are hidden."
+        },
+        "mergeguard.scanOpenPRs": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically include open PR branches when scanning for conflicts and enrich results with PR metadata."
+        },
+        "mergeguard.showTeamActivity": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show which teammates have branches modifying the same files (requires SCM integration)."
+        },
+        "mergeguard.includePaths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Only scan git roots whose paths contain one of these strings. Empty means scan all."
+        },
+        "mergeguard.excludePaths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Exclude git roots whose paths contain one of these strings from scanning."
+        }
+      }
+    },
+    "viewsWelcome": [
+      {
+        "view": "mergeguard.conflictsView",
+        "contents": "No merge conflicts detected.\n\nRun a scan to check for potential conflicts with tracked branches.\n[Scan All Branches](command:mergeguard.scanAll)\n[Configure Tracked Branches](command:mergeguard.configure)"
+      }
+    ],
+    "colors": [
+      {
+        "id": "mergeguard.conflictHighlight",
+        "description": "Background highlight color for predicted conflict regions.",
+        "defaults": {
+          "dark": "#ff000033",
+          "light": "#ff000022",
+          "highContrast": "#ff000055",
+          "highContrastLight": "#ff000044"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node esbuild.mjs --production",
+    "watch": "node esbuild.mjs --watch",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "prepackage": "npm run build",
+    "package": "vsce package",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/test-electron": "^2.4.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.21.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
