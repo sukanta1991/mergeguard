@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { execSync } from 'child_process';
+import { execSync, execFileSync } from 'child_process';
 import { mkdtempSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -56,8 +56,8 @@ describe('conflictContent', () => {
 
   describe('catFile', () => {
     it('returns content for a valid OID', async () => {
-      // Get the HEAD tree OID
-      const oid = execSync('git rev-parse HEAD^{tree}', {
+      // Get the HEAD tree OID — use execFileSync to avoid shell escaping issues with ^
+      const oid = execFileSync('git', ['rev-parse', 'HEAD^{tree}'], {
         cwd: fixtureDir,
         encoding: 'utf-8',
       }).trim();
