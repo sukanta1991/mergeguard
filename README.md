@@ -1,4 +1,4 @@
-# Merge Guard — PR Conflict Predictor
+# Merge Guard — Conflict Predictor
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/sukanta1991/mergeguard/main/images/icon.png" alt="Merge Guard Logo" width="128" height="128">
@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=SukantaSaha.mergeguard">
-    <img src="https://img.shields.io/badge/VS%20Code%20Marketplace-v1.0.0-blue?logo=visualstudiocode" alt="VS Code Marketplace">
+    <img src="https://img.shields.io/badge/VS%20Code%20Marketplace-v1.0.3-blue?logo=visualstudiocode" alt="VS Code Marketplace">
   </a>
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
 </p>
