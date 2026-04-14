@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import {
   getMergedFileContent,
   getFileAtRef,
-  getThreeWayContent,
   getMergeBase,
 } from '../core/conflictContent';
 

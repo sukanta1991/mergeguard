@@ -1,5 +1,5 @@
-import type { SCMProvider, PRMetadata } from '../scm/provider';
-import type { ConflictResult, ScanResult } from './types';
+import type { SCMProvider } from '../scm/provider';
+import type { ScanResult } from './types';
 
 /**
  * PR metadata attached to a ConflictResult after enrichment.

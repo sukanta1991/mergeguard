@@ -29,9 +29,9 @@ import { createGitHubProvider } from './scm/github';
 import { createGitLabProvider } from './scm/gitlab';
 import { createBitbucketProvider } from './scm/bitbucket';
 import { createAzureDevOpsProvider } from './scm/azureDevops';
-import { getPRBranchesToScan, enrichWithPRMetadata, formatPRDescription } from './core/prAwareAnalysis';
+import { enrichWithPRMetadata } from './core/prAwareAnalysis';
 import type { PRInfoMap } from './core/prAwareAnalysis';
-import { getTeamActivity, buildFileTeamActivity, formatTeamActivity } from './core/teamAwareness';
+import { getTeamActivity, buildFileTeamActivity } from './core/teamAwareness';
 import { MultiRootManager } from './core/multiRootManager';
 import { TelemetryService } from './core/telemetry';
 

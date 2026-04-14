@@ -123,7 +123,7 @@ export class GitLabProvider implements SCMProvider {
     let page = 1;
     const perPage = 100;
 
-    while (true) {
+    for (;;) {
       const response = await this.apiGet<GitLabMR[]>(
         `/projects/${this.projectPath}/merge_requests?state=opened&per_page=${perPage}&page=${page}`,
       );

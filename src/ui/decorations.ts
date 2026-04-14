@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import type { ConflictFile, ConflictResult, ScanResult } from '../core/types';
+import type { ConflictFile, ScanResult } from '../core/types';
 import { ConflictType } from '../core/types';
 
 /**

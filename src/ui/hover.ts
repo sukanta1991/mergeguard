@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ConflictType } from '../core/types';
-import type { DecorationController, FileConflictInfo } from './decorations';
+import type { DecorationController } from './decorations';
 
 /**
  * Describes a conflict type in human-readable terms for the hover tooltip.
@@ -77,8 +77,7 @@ export class ConflictHoverProvider implements vscode.HoverProvider {
       }
 
       // Action links
-      const encodedPath = encodeURIComponent(info.file.path);
-      const encodedBranch = encodeURIComponent(info.branch);
+
       md.appendMarkdown(
         `[$(diff) Preview Conflict](command:mergeguard.previewConflict?${encodeURIComponent(JSON.stringify([info.file.path, info.branch]))} "Open diff preview")`,
       );

@@ -123,7 +123,7 @@ export class AzureDevOpsProvider implements SCMProvider {
     let skip = 0;
     const top = 100;
 
-    while (true) {
+    for (;;) {
       const result = await this.apiGet<AzureDevOpsPRList>(
         `/${this.project}/_apis/git/repositories/${this.repoName}/pullrequests?searchCriteria.status=active&$top=${top}&$skip=${skip}&api-version=7.1`,
       );

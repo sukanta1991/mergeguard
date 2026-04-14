@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import type { ScanResult, ConflictResult } from '../core/types';
+import type { ScanResult } from '../core/types';
 import { RiskLevel } from '../core/types';
 
 const STATE_KEY = 'mergeguard.seenConflicts';

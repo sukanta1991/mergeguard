@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-import type { ScanResult, ConflictResult, ConflictFile } from '../core/types';
-import { ConflictType, RiskLevel } from '../core/types';
+import type { ScanResult } from '../core/types';
 
 /** Maximum number of historical risk scores to retain. */
 const MAX_HISTORY = 50;

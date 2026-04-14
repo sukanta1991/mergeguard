@@ -115,7 +115,7 @@ export class GitHubProvider implements SCMProvider {
     let page = 1;
     const perPage = 100;
 
-    while (true) {
+    for (;;) {
       const ghPRs = await this.apiGet<GitHubPR[]>(
         `/repos/${this.owner}/${this.repo}/pulls?state=open&per_page=${perPage}&page=${page}`,
       );
