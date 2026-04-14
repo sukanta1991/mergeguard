@@ -13,6 +13,16 @@ export type ScanListener = (scan: ScanResult, gitRoot: string) => void;
 /** Maximum number of concurrent branch analyses. */
 const MAX_CONCURRENCY = 4;
 
+/** Minimal type for VS Code's built-in Git extension API. */
+interface GitAPI {
+  getAPI(version: number): {
+    repositories: Array<{
+      rootUri: vscode.Uri;
+      state: { onDidChange: vscode.Event<void> };
+    }>;
+  } | undefined;
+}
+
 /**
  * Orchestrates conflict scanning, caching, and UI updates.
  *
@@ -88,6 +98,42 @@ export class ScanOrchestrator implements vscode.Disposable {
       this.intervalTimer = setInterval(() => {
         void this.safeScan();
       }, intervalSec * 1000);
+    }
+
+    // VS Code Git extension state changes — catches commits, pulls, fetches,
+    // stash operations, and other git actions performed through the UI that
+    // may not trigger the filesystem watchers reliably.
+    this.hookGitExtension();
+  }
+
+  /** Subscribe to the built-in Git extension's repository state changes. */
+  private hookGitExtension(): void {
+    try {
+      const gitExt = vscode.extensions.getExtension<GitAPI>('vscode.git');
+      if (!gitExt) return;
+
+      const subscribe = (api: GitAPI) => {
+        const git = api.getAPI(1);
+        if (!git) return;
+        for (const repo of git.repositories) {
+          if (repo.rootUri.fsPath === this.gitRoot) {
+            this.disposables.push(
+              repo.state.onDidChange(() => {
+                this.logger.info('Git extension state changed — triggering scan.');
+                void this.safeScan();
+              }),
+            );
+          }
+        }
+      };
+
+      if (gitExt.isActive && gitExt.exports) {
+        subscribe(gitExt.exports);
+      } else {
+        gitExt.activate().then(subscribe, () => { /* ignore activation failure */ });
+      }
+    } catch {
+      // Git extension not available — rely on filesystem watchers
     }
   }
 

@@ -52,6 +52,23 @@ export class BranchMonitor implements vscode.Disposable {
     refsWatcher.onDidCreate(() => this.checkTrackedBranchUpdates());
     refsWatcher.onDidDelete(() => this.checkTrackedBranchUpdates());
     this.disposables.push(refsWatcher);
+
+    // Watch .git/packed-refs — git fetch/pull often updates packed-refs
+    // instead of loose files under .git/refs/, so the refs watcher alone
+    // misses those updates.
+    const packedRefsPattern = new vscode.RelativePattern(rootUri, '.git/packed-refs');
+    const packedRefsWatcher = vscode.workspace.createFileSystemWatcher(packedRefsPattern);
+    packedRefsWatcher.onDidChange(() => this.checkTrackedBranchUpdates());
+    packedRefsWatcher.onDidCreate(() => this.checkTrackedBranchUpdates());
+    this.disposables.push(packedRefsWatcher);
+
+    // Watch .git/FETCH_HEAD — written after every `git fetch` or `git pull`,
+    // catches remote updates even when packed-refs isn't modified.
+    const fetchHeadPattern = new vscode.RelativePattern(rootUri, '.git/FETCH_HEAD');
+    const fetchHeadWatcher = vscode.workspace.createFileSystemWatcher(fetchHeadPattern);
+    fetchHeadWatcher.onDidChange(() => this.checkTrackedBranchUpdates());
+    fetchHeadWatcher.onDidCreate(() => this.checkTrackedBranchUpdates());
+    this.disposables.push(fetchHeadWatcher);
   }
 
   /**
