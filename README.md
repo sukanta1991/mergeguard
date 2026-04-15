@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=SukantaSaha.mergeguard">
-    <img src="https://img.shields.io/badge/VS%20Code%20Marketplace-v1.0.3-blue?logo=visualstudiocode" alt="VS Code Marketplace">
+    <img src="https://img.shields.io/badge/VS%20Code%20Marketplace-v1.0.4-blue?logo=visualstudiocode" alt="VS Code Marketplace">
   </a>
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
 </p>
