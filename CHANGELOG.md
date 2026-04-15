@@ -5,6 +5,19 @@ All notable changes to the MergeGuard extension will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] — 2026-04-15
+
+### Fixed
+
+- Fix "Tracked Branches" sidebar showing "no data provider" — register `TrackedBranchesTreeProvider` for `mergeguard.branchesView`
+- Fix "Dashboard" sidebar view loading forever — register `DashboardViewProvider` (WebviewViewProvider) for `mergeguard.dashboardView`
+
+### Added
+
+- Tracked Branches sidebar view showing monitored branch names and short SHAs
+- Sidebar Dashboard webview rendering risk gauge, branch breakdown, file heatmap, and timeline inline
+- Both sidebar views auto-refresh on every scan completion
+
 ## [1.0.2] — 2026-04-14
 
 ### Fixed

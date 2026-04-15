@@ -471,3 +471,42 @@ function getNonce(): string {
   }
   return nonce;
 }
+
+// ────────────────────────────────────────────────────
+// Sidebar webview view provider
+// ────────────────────────────────────────────────────
+
+/**
+ * WebviewViewProvider for the sidebar "Dashboard" panel.
+ * Renders a compact version of the risk dashboard inside the sidebar.
+ */
+export class DashboardViewProvider implements vscode.WebviewViewProvider {
+  private view: vscode.WebviewView | undefined;
+  private lastScan: ScanResult | undefined;
+
+  constructor(private readonly globalState: vscode.Memento) {}
+
+  resolveWebviewView(webviewView: vscode.WebviewView): void {
+    this.view = webviewView;
+    webviewView.webview.options = { enableScripts: true, localResourceRoots: [] };
+    webviewView.webview.onDidReceiveMessage((msg: { command: string; filePath?: string; branch?: string }) => {
+      if (msg.command === 'openFile' && msg.filePath) {
+        vscode.commands.executeCommand('vscode.open', vscode.Uri.file(msg.filePath));
+      } else if (msg.command === 'previewConflict' && msg.filePath && msg.branch) {
+        vscode.commands.executeCommand('mergeguard.previewConflict', msg.filePath, msg.branch);
+      }
+    });
+    this.refresh();
+  }
+
+  update(scan: ScanResult, _gitRoot: string): void {
+    this.lastScan = scan;
+    this.refresh();
+  }
+
+  private refresh(): void {
+    if (!this.view) return;
+    const history = this.globalState.get<RiskHistoryEntry[]>(GLOBAL_STATE_KEY, []);
+    this.view.webview.html = buildDashboardHtml(this.lastScan, history);
+  }
+}
