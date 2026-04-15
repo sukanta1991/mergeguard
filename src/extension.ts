@@ -34,6 +34,8 @@ import type { PRInfoMap } from './core/prAwareAnalysis';
 import { getTeamActivity, buildFileTeamActivity } from './core/teamAwareness';
 import { MultiRootManager } from './core/multiRootManager';
 import { TelemetryService } from './core/telemetry';
+import { TrackedBranchesTreeProvider } from './ui/trackedBranchesView';
+import { DashboardViewProvider } from './ui/dashboard';
 
 // Lazy-loaded dashboard — only imported when the dashboard is first opened
 let DashboardPanelClass: typeof import('./ui/dashboard').DashboardPanel | undefined;
@@ -148,6 +150,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   });
   context.subscriptions.push(conflictsTreeView);
 
+  // Register tracked branches tree view
+  const trackedBranchesProvider = new TrackedBranchesTreeProvider(branchMonitor);
+  const branchesTreeView = vscode.window.createTreeView('mergeguard.branchesView', {
+    treeDataProvider: trackedBranchesProvider,
+  });
+  context.subscriptions.push(branchesTreeView);
+
+  // Register sidebar dashboard webview
+  const dashboardViewProvider = new DashboardViewProvider(context.globalState);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider('mergeguard.dashboardView', dashboardViewProvider),
+  );
+
   // Register file decoration provider
   context.subscriptions.push(
     vscode.window.registerFileDecorationProvider(fileDecorations),
@@ -185,6 +200,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       if (dashboard) {
         dashboard.update(scan, root);
       }
+      // Update sidebar dashboard view
+      dashboardViewProvider.update(scan, root);
+
+      // Update tracked branches view
+      void trackedBranchesProvider.loadAndRefresh();
 
       // Log scan telemetry
       telemetry.logScan({
