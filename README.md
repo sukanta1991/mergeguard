@@ -1,83 +1,105 @@
-# Merge Guard — Conflict Predictor
+# Merge Guard — Detect & Prevent Git Merge Conflicts in VS Code
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/sukanta1991/mergeguard/main/images/icon.png" alt="Merge Guard Logo" width="128" height="128">
 </p>
 
 <p align="center">
-  <strong>Predict merge conflicts before they happen.</strong><br>
-  Continuously monitors your Git branches and warns you about potential merge conflicts — before you even open a Pull Request.
+  <strong>VS Code extension to detect and prevent Git merge conflicts early.</strong><br>
+  Continuously monitors your branches and warns you about conflicts — before you pull, push, or open a PR.
 </p>
 
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=SukantaSaha.mergeguard">
-    <img src="https://img.shields.io/badge/VS%20Code%20Marketplace-v1.0.4-blue?logo=visualstudiocode" alt="VS Code Marketplace">
+    <img src="https://img.shields.io/badge/VS%20Code%20Marketplace-v1.0.5-blue?logo=visualstudiocode" alt="VS Code Marketplace">
   </a>
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
 </p>
 
 ---
 
-## How It Works
+### Why Merge Guard?
 
-MergeGuard uses `git merge-tree --write-tree` to perform **true merge simulations** without touching your working tree. It compares your current branch against configured target branches and reports exactly which files and line ranges would conflict.
+> Stop getting surprised by merge conflicts.
 
-```
-Your Branch ─────┐
-                  ├──► git merge-tree (simulation) ──► Conflict Report
-Target Branch ───┘
-```
+✅ **Detect conflicts before they happen** — scans your branches continuously in the background  
+✅ **See exact files & lines at risk** — know what will break before you pull or open a PR  
+✅ **Reduce painful merge debugging** — get warnings early, fix issues while they're small  
+✅ **Zero side effects** — simulations never touch your working tree or create commits  
+
+---
+
+### What developers are saying
+
+> ⭐⭐⭐⭐⭐ *"Extremely helpful tool for resolving merge conflicts — no more manual effort needed. It makes the whole process smooth and fast."*
+
+> ⭐⭐⭐⭐⭐ *"Finally, a useful tool to prevent cursing your colleagues at every 'git push'."*
+
+> ⭐⭐⭐⭐⭐ *"This is a very useful tool and saves a lot of time for me."*
+
+**Rated 5.0/5** on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=SukantaSaha.mergeguard&ssr=false#review-details) · Built to solve real-world Git pain.
+
+---
 
 ## Features
 
-### Core Detection
-- **Real-time conflict detection** — Scans tracked branches automatically on save, branch switch, or on demand
-- **Risk scoring** — Quantifies conflict severity with a 0–100 score across five weighted dimensions
-- **Smart caching** — SHA-keyed LRU cache avoids redundant analysis when branches haven't changed
-- **Graceful fallback** — Works with any Git version; uses `merge-base + diff` when `merge-tree --write-tree` isn't available (Git < 2.38)
+### 🔍 Detection
+- **Real-time conflict scanning** — Automatically scans on save, branch switch, or on demand
+- **Risk scoring** — 0–100 severity score across five weighted dimensions
+- **PR-aware analysis** — Discovers open PRs/MRs and includes their branches in scans
+- **Multi-branch & multi-root** — Monitors all branches and git repositories in your workspace
+- **Smart caching** — SHA-keyed cache skips redundant analysis when nothing has changed
+- **Works with any Git version** — Full precision with Git 2.38+; graceful diff-based fallback for older versions
 
-### Editor Integration
-- **Inline editor decorations** — Highlights predicted conflict regions directly in the editor with color-coded gutter marks
-- **CodeLens annotations** — See conflict info above affected regions; click to preview or diff
-- **Rich hover tooltips** — Hover over highlighted regions to see branch, conflict type, and quick action links
+### 👁 Visualization
+- **Inline editor highlights** — Color-coded gutter marks on predicted conflict regions
+- **CodeLens annotations** — Conflict info above affected code; click to preview or diff
+- **Rich hover tooltips** — Branch, conflict type, and quick actions on hover
+- **Sidebar TreeView** — Browse conflicts by branch → file → region; sort, filter, and dismiss
+- **Risk dashboard** — Interactive webview with gauge, heatmap, pie chart, and timeline
+- **Status bar & badges** — At-a-glance conflict count in the status bar and File Explorer
+- **Problems panel** — Conflicts surface as warnings in VS Code's built-in diagnostics
 
-### UI & Dashboard
-- **Status bar indicator** — At-a-glance conflict count and risk level with color-coded backgrounds
-- **Enhanced TreeView sidebar** — Browse conflicts by branch → file → region with sort (severity/name/branch), filter (high-risk only), and dismiss actions
-- **Conflict count badge** — Activity bar icon shows the number of active conflicts
-- **Welcome view** — Helpful getting-started view when no conflicts are detected
-- **Risk dashboard** — Interactive webview with gauge, branch breakdown, file heatmap, pie chart, and timeline
-- **Problems panel integration** — Conflicts appear as warnings in VS Code's built-in Problems panel
-- **File Explorer badges** — Conflicted files show a warning badge with the number of conflicting branches
+### 🧠 Intelligence
+- **Three-way diff & conflict preview** — Compare base↔ours and base↔theirs side-by-side
+- **Merge order optimization** — Suggests the best sequence to minimize cascading conflicts
+- **Team awareness** — See who's editing overlapping files via SCM metadata
+- **Smart notifications** — Only alerts on new conflicts; configurable levels (all / high / badge / silent)
+- **SCM integration** — GitHub, GitLab, Bitbucket Cloud, and Azure DevOps with secure token storage
 
-### Intelligence
-- **Conflict preview & three-way diff** — Preview merged content or compare base↔ours and base↔theirs side-by-side
-- **Merge order optimization** — Suggests the optimal merge sequence to minimize cascading conflicts
-- **Smart notifications** — Tracks seen conflicts and only alerts on new ones; configurable notification levels (all/high/badge/silent)
+---
 
-### SCM Integration
-- **Multi-platform support** — GitHub, GitLab, Bitbucket Cloud, and Azure DevOps
-- **PR-aware conflict analysis** — Automatically discovers open PRs/MRs and includes their branches in conflict scans
-- **Team awareness** — See which teammates are working on files that overlap with your changes
-- **Secure authentication** — Tokens stored exclusively in VS Code's SecretStorage; never logged or exposed
+## How It Works
 
-### Monorepo & Multi-Root
-- **Multi-root workspace support** — Automatically detects and monitors all git repositories in your workspace
-- **Path filtering** — Include/exclude specific paths for targeted scanning
-- **Aggregated risk dashboard** — Unified view across all git roots with per-root breakdown
+MergeGuard simulates merges in the background — **no files are changed, no commits are created.**
 
-## Requirements
+```
+Your Branch ─────┐
+                  ├──► merge simulation ──► Conflict Report
+Target Branch ───┘
+```
+
+It uses `git merge-tree` to compare your branch against targets and reports exactly which files and line ranges would conflict. Everything runs in Git's object database — your working tree is never touched.
+
+## Quick Start
+
+1. **Install** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=SukantaSaha.mergeguard)
+2. **Open** any Git repo
+3. **See conflicts instantly** in the sidebar
+
+That's it — MergeGuard auto-detects your branches and starts scanning.
+
+## Setup & Configuration
+
+### Requirements
 
 - **VS Code 1.85+**
 - **Git 2.38+** recommended (for `merge-tree --write-tree`). Older Git versions are supported with approximate conflict detection via a diff-based fallback.
 
-## Getting Started
+### Detailed Setup
 
-1. **Install** the extension from the VS Code Marketplace
-2. **Open** a Git repository in VS Code  
-3. MergeGuard **auto-detects** your branches and starts monitoring
-4. View conflicts in the **MergeGuard sidebar** (Activity Bar)
-5. Configure tracked branches: `Cmd/Ctrl+Shift+P` → **MergeGuard: Configure Tracked Branches**
+1. View conflicts in the **MergeGuard sidebar** (Activity Bar)
+2. Configure tracked branches: `Cmd/Ctrl+Shift+P` → **MergeGuard: Configure Tracked Branches**
 
 ## SCM Platform Setup
 
