@@ -5,8 +5,8 @@
 </p>
 
 <p align="center">
-  <strong>VS Code extension to detect and prevent Git merge conflicts early.</strong><br>
-  Continuously monitors your branches and warns you about conflicts — before you pull, push, or open a PR.
+  <strong>Tired of unexpected merge conflicts breaking your workflow?</strong><br>
+  See them before they happen — right inside VS Code.
 </p>
 
 <p align="center">
@@ -20,11 +20,11 @@
 
 ### Why Merge Guard?
 
-> Stop getting surprised by merge conflicts.
+> **Git shows conflicts after they happen. MergeGuard shows them before.**
 
-✅ **Detect conflicts before they happen** — scans your branches continuously in the background  
-✅ **See exact files & lines at risk** — know what will break before you pull or open a PR  
-✅ **Reduce painful merge debugging** — get warnings early, fix issues while they're small  
+✅ **Avoid broken merges** — know exactly what will conflict before you pull or open a PR  
+✅ **Save debugging time** — get warnings early, fix issues while they're small  
+✅ **Reduce PR friction** — no more surprise conflicts blocking your team's reviews  
 ✅ **Zero side effects** — simulations never touch your working tree or create commits  
 
 ---
@@ -75,7 +75,7 @@ MergeGuard simulates merges in the background — **no files are changed, no com
 
 ```
 Your Branch ─────┐
-                  ├──► merge simulation ──► Conflict Report
+                 ├──► merge simulation ──► Conflict Report
 Target Branch ───┘
 ```
 
