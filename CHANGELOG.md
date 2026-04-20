@@ -5,6 +5,21 @@ All notable changes to the MergeGuard extension will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] — 2026-04-20
+
+### Changed
+
+- Rename extension display name from "Merge Guard — Conflict Predictor" to "Merge Guard - Git Merge Conflict Predictor" for better marketplace discoverability
+- Remove GitHub Release step from CI workflow — publish via VSCE only
+
+## [1.0.5] — 2026-04-20
+
+### Changed
+
+- Revise README with new tagline, user testimonials, and reorganized feature sections
+- Add `.github` directory to `.vscodeignore` to reduce extension package size
+- Update CI pipeline to auto-add release notes on publish
+
 ## [1.0.4] — 2026-04-15
 
 ### Fixed
@@ -17,6 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tracked Branches sidebar view showing monitored branch names and short SHAs
 - Sidebar Dashboard webview rendering risk gauge, branch breakdown, file heatmap, and timeline inline
 - Both sidebar views auto-refresh on every scan completion
+
+## [1.0.3] — 2026-04-14
+
+### Fixed
+
+- Fix extension display name — rename from "Merge Guard — PR Conflict Predictor" to "Merge Guard — Conflict Predictor"
+- Update marketplace badge version in README
 
 ## [1.0.2] — 2026-04-14
 
