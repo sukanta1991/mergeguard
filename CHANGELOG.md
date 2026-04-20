@@ -62,13 +62,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Performance optimization (M4.1)** — Incremental scanning with SHA-pair tracking skips unchanged branches; parallel branch analysis (max 4 concurrent `merge-tree` processes); lazy-loaded dashboard via dynamic `import()`; activation timing and performance logging
-- **Error handling hardening (M4.2)** — Workspace trust check (`vscode.workspace.isTrusted`); Git version/install validation with actionable messages and install link; `safeScan()` wrapper prevents uncaught exceptions; network error fallback with stale data; all errors logged with stack traces
-- **Accessibility (M4.3)** — `accessibilityInformation` on all TreeView items (branch, file, region) and StatusBar states; ARIA roles/labels on dashboard elements (`role="meter"`, `role="region"`, `role="img"`); keyboard navigation with `tabindex`/`onkeydown`; `:focus-visible` styles
-- **Internationalization (M4.4)** — All user-facing strings wrapped in `vscode.l10n.t()`; English base bundle at `l10n/bundle.l10n.json` (80+ strings); `l10n` field in `package.json`; translation contribution guide
-- **Telemetry (M4.5)** — Opt-in telemetry via `vscode.env.createTelemetryLogger`; tracks activation time, scan duration, branch/conflict counts, feature usage, error counts by type; respects `vscode.env.isTelemetryEnabled`
-- **Documentation (M4.6)** — `docs/` folder with architecture overview, contributing guide, development setup, and API documentation; README expanded with comparison table, performance benchmarks, troubleshooting guide
-- **Community readiness (M4.7)** — Question issue template; PR template; Code of Conduct; CI auto-publish on `vX.Y.Z` tags via `VSCE_PAT`
+- **Performance optimization** — Incremental scanning with SHA-pair tracking skips unchanged branches; parallel branch analysis (max 4 concurrent `merge-tree` processes); lazy-loaded dashboard via dynamic `import()`; activation timing and performance logging
+- **Error handling hardening** — Workspace trust check (`vscode.workspace.isTrusted`); Git version/install validation with actionable messages and install link; `safeScan()` wrapper prevents uncaught exceptions; network error fallback with stale data; all errors logged with stack traces
+- **Accessibility** — `accessibilityInformation` on all TreeView items (branch, file, region) and StatusBar states; ARIA roles/labels on dashboard elements (`role="meter"`, `role="region"`, `role="img"`); keyboard navigation with `tabindex`/`onkeydown`; `:focus-visible` styles
+- **Internationalization** — All user-facing strings wrapped in `vscode.l10n.t()`; English base bundle at `l10n/bundle.l10n.json` (80+ strings); `l10n` field in `package.json`; translation contribution guide
+- **Telemetry** — Opt-in telemetry via `vscode.env.createTelemetryLogger`; tracks activation time, scan duration, branch/conflict counts, feature usage, error counts by type; respects `vscode.env.isTelemetryEnabled`
+- **Documentation** — `docs/` folder with architecture overview, contributing guide, development setup, and API documentation; README expanded with comparison table, performance benchmarks, troubleshooting guide
+- **Community readiness** — Question issue template; PR template; Code of Conduct; CI auto-publish on `vX.Y.Z` tags via `VSCE_PAT`
 - **Remote development support** — `extensionKind: ["workspace"]` for SSH, Codespaces, and WSL compatibility
 - **Gallery banner** — Dark theme banner for marketplace listing
 - **Expanded keywords** — Added `diff`, `merge-tree`, `risk` for discoverability
