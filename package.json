@@ -2,7 +2,7 @@
   "name": "mergeguard",
   "displayName": "Merge Guard — Conflict Predictor",
   "description": "Predict merge conflicts before they happen. Continuously monitors branches and warns about potential conflicts using git merge-tree simulation.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "SukantaSaha",
   "author": "Sukanta Saha",
   "license": "MIT",
