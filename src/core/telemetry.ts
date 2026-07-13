@@ -30,8 +30,9 @@ export class TelemetryService implements vscode.Disposable {
           },
         });
       }
-    } catch {
-      // Telemetry creation failed — continue without it.
+    } catch (err) {
+      // Telemetry creation failed — log to console since Logger may not be initialized yet.
+      console.warn(`[MergeGuard] Telemetry initialization failed: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
 

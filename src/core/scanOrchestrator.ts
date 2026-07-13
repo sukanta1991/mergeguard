@@ -130,10 +130,12 @@ export class ScanOrchestrator implements vscode.Disposable {
       if (gitExt.isActive && gitExt.exports) {
         subscribe(gitExt.exports);
       } else {
-        gitExt.activate().then(subscribe, () => { /* ignore activation failure */ });
+        gitExt.activate().then(subscribe, (err) => {
+          this.logger.warn(`Git extension activation failed: ${err instanceof Error ? err.message : String(err)}`);
+        });
       }
-    } catch {
-      // Git extension not available — rely on filesystem watchers
+    } catch (err) {
+      this.logger.info(`Git extension not available, relying on filesystem watchers: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
 

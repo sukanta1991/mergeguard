@@ -29,13 +29,15 @@ export class GitHubProvider implements SCMProvider {
     private readonly owner: string,
     private readonly repo: string,
     private readonly apiBase: string,
+    private readonly logger?: { warn(msg: string): void },
   ) {}
 
   async isAuthenticated(): Promise<boolean> {
     try {
       const token = await this.getToken();
       return token !== undefined;
-    } catch {
+    } catch (err) {
+      this.logger?.warn(`GitHub auth check failed: ${err instanceof Error ? err.message : String(err)}`);
       return false;
     }
   }
@@ -88,8 +90,8 @@ export class GitHubProvider implements SCMProvider {
         this.token = session.accessToken;
         return this.token;
       }
-    } catch {
-      // Auth not available
+    } catch (err) {
+      this.logger?.warn(`GitHub token retrieval failed: ${err instanceof Error ? err.message : String(err)}`);
     }
     return undefined;
   }
@@ -104,8 +106,8 @@ export class GitHubProvider implements SCMProvider {
         this.token = session.accessToken;
         return true;
       }
-    } catch {
-      // User cancelled or auth failed
+    } catch (err) {
+      this.logger?.warn(`GitHub authentication failed: ${err instanceof Error ? err.message : String(err)}`);
     }
     return false;
   }
@@ -179,6 +181,6 @@ export class GitHubProvider implements SCMProvider {
 
 // ── Factory function ─────────────────────────────────────
 
-export async function createGitHubProvider(info: RemoteInfo): Promise<GitHubProvider> {
-  return new GitHubProvider(info.owner, info.repo, info.apiBase);
+export async function createGitHubProvider(info: RemoteInfo, logger?: { warn(msg: string): void }): Promise<GitHubProvider> {
+  return new GitHubProvider(info.owner, info.repo, info.apiBase, logger);
 }

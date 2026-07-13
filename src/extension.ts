@@ -124,9 +124,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   context.subscriptions.push(statusBar, decorations, diagnostics, fileDecorations, codeLens, notifications);
 
   // ── SCM provider detection ───────────────────
-  registerSCMProviderFactory('github', createGitHubProvider);
+  registerSCMProviderFactory('github', (info) => createGitHubProvider(info, logger));
   registerSCMProviderFactory('gitlab', (info) => createGitLabProvider(info, context.secrets));
-  registerSCMProviderFactory('bitbucket', (info) => createBitbucketProvider(info, context.secrets));
+  registerSCMProviderFactory('bitbucket', (info) => createBitbucketProvider(info, context.secrets, logger));
   registerSCMProviderFactory('azureDevops', (info) => createAzureDevOpsProvider(info, context.secrets));
 
   let scmProvider: SCMProvider | undefined;
@@ -538,7 +538,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     // Enrich with PR metadata if an SCM provider is available
     if (scmProvider && config.get<boolean>('scanOpenPRs', true)) {
       try {
-        prInfoMap = await enrichWithPRMetadata(scan, scmProvider);
+        prInfoMap = await enrichWithPRMetadata(scan, scmProvider, logger, telemetry);
         if (prInfoMap.size > 0) {
           logger.info(`PR metadata enriched: ${prInfoMap.size} branch(es) linked to PRs.`);
         }
