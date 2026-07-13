@@ -36,6 +36,7 @@ export class BitbucketProvider implements SCMProvider {
     private readonly repo: string,
     private readonly apiBase: string,
     private readonly secrets?: vscode.SecretStorage,
+    private readonly logger?: { warn(msg: string): void },
   ) {}
 
   async isAuthenticated(): Promise<boolean> {
@@ -113,8 +114,8 @@ export class BitbucketProvider implements SCMProvider {
         try {
           this.credentials = JSON.parse(stored);
           return this.credentials;
-        } catch {
-          // Corrupted data, ignore
+        } catch (err) {
+          this.logger?.warn(`Bitbucket credentials corrupted in secret storage: ${err instanceof Error ? err.message : String(err)}`);
         }
       }
     }
@@ -179,6 +180,7 @@ export class BitbucketProvider implements SCMProvider {
 export async function createBitbucketProvider(
   info: RemoteInfo,
   secrets?: vscode.SecretStorage,
+  logger?: { warn(msg: string): void },
 ): Promise<BitbucketProvider> {
-  return new BitbucketProvider(info.owner, info.repo, info.apiBase, secrets);
+  return new BitbucketProvider(info.owner, info.repo, info.apiBase, secrets, logger);
 }

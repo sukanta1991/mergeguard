@@ -122,7 +122,7 @@ export class MultiRootManager implements vscode.Disposable {
         maxRiskScore = Math.max(maxRiskScore, scan.overallRiskScore);
         totalConflictFiles += scan.totalConflictFiles;
       } catch (err) {
-        this.logger.info(
+        this.logger.error(
           `Scan failed for root ${gitRoot}: ${err instanceof Error ? err.message : String(err)}`,
         );
       }

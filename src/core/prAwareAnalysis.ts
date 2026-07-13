@@ -1,5 +1,7 @@
 import type { SCMProvider } from '../scm/provider';
 import type { ScanResult } from './types';
+import type { Logger } from './logger';
+import type { TelemetryService } from './telemetry';
 
 /**
  * PR metadata attached to a ConflictResult after enrichment.
@@ -30,12 +32,16 @@ export type PRInfoMap = Map<string, PRConflictInfo>;
 export async function getPRBranchesToScan(
   scmProvider: SCMProvider,
   trackedBranches: string[],
+  logger?: Logger,
+  telemetry?: TelemetryService,
 ): Promise<string[]> {
   try {
     const prBranches = await scmProvider.getPRBranches();
     const tracked = new Set(trackedBranches);
     return prBranches.filter(b => !tracked.has(b));
-  } catch {
+  } catch (err) {
+    logger?.warn(`Failed to fetch PR branches from SCM: ${err instanceof Error ? err.message : String(err)}`);
+    telemetry?.logError('scm_pr_branches');
     return [];
   }
 }
@@ -48,6 +54,8 @@ export async function getPRBranchesToScan(
 export async function enrichWithPRMetadata(
   scan: ScanResult,
   scmProvider: SCMProvider,
+  logger?: Logger,
+  telemetry?: TelemetryService,
 ): Promise<PRInfoMap> {
   const prInfoMap: PRInfoMap = new Map();
 
@@ -68,8 +76,9 @@ export async function enrichWithPRMetadata(
         });
       }
     }
-  } catch {
-    // SCM API failure — return empty map, don't break scan flow
+  } catch (err) {
+    logger?.warn(`PR metadata enrichment failed: ${err instanceof Error ? err.message : String(err)}`);
+    telemetry?.logError('scm_pr_metadata');
   }
 
   return prInfoMap;
