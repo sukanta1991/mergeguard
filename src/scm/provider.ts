@@ -115,7 +115,7 @@ export function parseRemoteUrl(url: string): RemoteInfo | undefined {
   if (host === 'bitbucket.org') {
     return { type: 'bitbucket', owner, repo, apiBase: 'https://api.bitbucket.org/2.0' };
   }
-  if (host.includes('dev.azure.com') || host.includes('visualstudio.com')) {
+  if (host === 'dev.azure.com' || host.endsWith('.visualstudio.com')) {
     return { type: 'azureDevops', owner, repo, apiBase: `https://dev.azure.com/${owner}` };
   }
 

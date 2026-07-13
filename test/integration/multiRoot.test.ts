@@ -14,33 +14,39 @@ vi.mock('../../src/core/gitOps', () => ({
 
 // Mock BranchMonitor, CacheManager, ScanOrchestrator
 vi.mock('../../src/core/branchMonitor', () => ({
-  BranchMonitor: vi.fn().mockImplementation(() => ({
-    onBranchChanged: vi.fn(),
-    onTrackedBranchUpdated: vi.fn(),
-    dispose: vi.fn(),
-  })),
+  BranchMonitor: vi.fn().mockImplementation(function () {
+    return {
+      onBranchChanged: vi.fn(),
+      onTrackedBranchUpdated: vi.fn(),
+      dispose: vi.fn(),
+    };
+  }),
 }));
 
 vi.mock('../../src/core/cache', () => ({
-  CacheManager: vi.fn().mockImplementation(() => ({
-    get: vi.fn(),
-    set: vi.fn(),
-    invalidate: vi.fn(),
-    invalidateAll: vi.fn(),
-    dispose: vi.fn(),
-  })),
+  CacheManager: vi.fn().mockImplementation(function () {
+    return {
+      get: vi.fn(),
+      set: vi.fn(),
+      invalidate: vi.fn(),
+      invalidateAll: vi.fn(),
+      dispose: vi.fn(),
+    };
+  }),
 }));
 
 const mockRunScan = vi.fn();
 const mockOnScanComplete = vi.fn();
 
 vi.mock('../../src/core/scanOrchestrator', () => ({
-  ScanOrchestrator: vi.fn().mockImplementation(() => ({
-    runScan: mockRunScan,
-    onScanComplete: mockOnScanComplete,
-    getLastScan: vi.fn(),
-    dispose: vi.fn(),
-  })),
+  ScanOrchestrator: vi.fn().mockImplementation(function () {
+    return {
+      runScan: mockRunScan,
+      onScanComplete: mockOnScanComplete,
+      getLastScan: vi.fn(),
+      dispose: vi.fn(),
+    };
+  }),
 }));
 
 import { findGitRoots } from '../../src/core/gitOps';
