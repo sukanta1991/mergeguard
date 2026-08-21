@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import * as vscode from 'vscode';
 import { GitLabProvider } from '../../src/scm/gitlab';
 
 // ── Mock data ────────────────────────────────────────────
@@ -88,6 +89,17 @@ describe('GitLabProvider', () => {
   it('isAuthenticated returns true after setToken', async () => {
     await provider.setToken('glpat-test');
     expect(await provider.isAuthenticated()).toBe(true);
+  });
+
+  it('authenticate stores token entered via input box', async () => {
+    vi.spyOn(vscode.window, 'showInputBox').mockResolvedValueOnce('glpat-entered');
+    expect(await provider.authenticate()).toBe(true);
+    expect(await provider.isAuthenticated()).toBe(true);
+  });
+
+  it('authenticate returns false when input is cancelled', async () => {
+    vi.spyOn(vscode.window, 'showInputBox').mockResolvedValueOnce(undefined);
+    expect(await provider.authenticate()).toBe(false);
   });
 
   it('getOpenPRs fetches merge requests', async () => {

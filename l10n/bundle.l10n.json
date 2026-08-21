@@ -43,6 +43,8 @@
   "MergeGuard — Click to open conflict panel": "MergeGuard — Click to open conflict panel",
   "MergeGuard: Scanning...": "MergeGuard: Scanning...",
   "MergeGuard — Scanning for conflicts...": "MergeGuard — Scanning for conflicts...",
+  "MergeGuard: Current repository is not a {0} repository.": "MergeGuard: Current repository is not a {0} repository.",
+  "MergeGuard: {0} credentials saved.": "MergeGuard: {0} credentials saved.",
   "MergeGuard: No conflicts": "MergeGuard: No conflicts",
   "MergeGuard — No merge conflicts detected": "MergeGuard — No merge conflicts detected",
   "MergeGuard: Error": "MergeGuard: Error",

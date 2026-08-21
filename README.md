@@ -134,6 +134,9 @@ Run `MergeGuard: Set Azure DevOps PAT` and enter a Personal Access Token with **
 | `MergeGuard: Sort Conflicts` | Sort tree view by severity, file name, or branch |
 | `MergeGuard: Toggle High-Risk Filter` | Show only high-risk conflicts in the tree view |
 | `MergeGuard: Dismiss Conflict` | Dismiss a conflict from the tree (won't re-notify) |
+| `MergeGuard: Set GitLab PAT` | Store a GitLab Personal Access Token |
+| `MergeGuard: Set Bitbucket Credentials` | Store Bitbucket username and App Password |
+| `MergeGuard: Set Azure DevOps PAT` | Store an Azure DevOps Personal Access Token |
 
 ## Extension Settings
 

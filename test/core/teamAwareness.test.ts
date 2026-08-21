@@ -18,6 +18,7 @@ function makeMockProvider(prs: PR[]): SCMProvider {
   return {
     type: 'github',
     isAuthenticated: vi.fn().mockResolvedValue(true),
+    authenticate: vi.fn().mockResolvedValue(true),
     getOpenPRs: vi.fn().mockResolvedValue(prs),
     getPRBranches: vi.fn().mockResolvedValue(prs.map(p => p.sourceBranch)),
     getPRMetadata: vi.fn(),

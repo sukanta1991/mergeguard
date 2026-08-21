@@ -241,6 +241,7 @@ export const window = {
   registerFileDecorationProvider: () => ({ dispose: () => {} }),
   onDidChangeActiveTextEditor: () => ({ dispose: () => {} }),
   showQuickPick: async () => undefined,
+  showInputBox: async () => undefined,
   showInformationMessage: async () => undefined,
   showErrorMessage: async () => undefined,
   showWarningMessage: async () => undefined,

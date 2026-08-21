@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import * as vscode from 'vscode';
 import { BitbucketProvider } from '../../src/scm/bitbucket';
 
 // Mock fetch globally
@@ -52,6 +53,29 @@ describe('BitbucketProvider', () => {
   it('isAuthenticated returns true when credentials are stored', async () => {
     mockSecrets.get.mockResolvedValue(JSON.stringify({ username: 'user', password: 'pass' }));
     expect(await provider.isAuthenticated()).toBe(true);
+  });
+
+  it('authenticate stores username and app password', async () => {
+    vi.spyOn(vscode.window, 'showInputBox')
+      .mockResolvedValueOnce('user')
+      .mockResolvedValueOnce('app-pass');
+    expect(await provider.authenticate()).toBe(true);
+    expect(mockSecrets.store).toHaveBeenCalledWith(
+      expect.any(String),
+      JSON.stringify({ username: 'user', password: 'app-pass' }),
+    );
+  });
+
+  it('authenticate returns false when username is cancelled', async () => {
+    vi.spyOn(vscode.window, 'showInputBox').mockResolvedValueOnce(undefined);
+    expect(await provider.authenticate()).toBe(false);
+  });
+
+  it('authenticate returns false when app password is cancelled', async () => {
+    vi.spyOn(vscode.window, 'showInputBox')
+      .mockResolvedValueOnce('user')
+      .mockResolvedValueOnce(undefined);
+    expect(await provider.authenticate()).toBe(false);
   });
 
   it('getOpenPRs fetches and maps PRs', async () => {
