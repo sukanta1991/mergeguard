@@ -121,6 +121,9 @@ export function parseRemoteUrl(url: string): RemoteInfo | undefined {
 
   // Self-hosted: check for common patterns
   // Assume GitLab for unknown self-hosted (most common self-hosted SCM)
+  if (host.startsWith('git.')) {
+    return { type: 'gitlab', owner, repo, apiBase: `https://${host}/api/v4` };
+  }
   // GitHub Enterprise uses /api/v3
   return { type: 'unknown', owner, repo, apiBase: `https://${host}` };
 }
