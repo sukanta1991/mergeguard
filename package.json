@@ -104,6 +104,21 @@
         "title": "Toggle High-Risk Filter",
         "category": "MergeGuard",
         "icon": "$(filter)"
+      },
+      {
+        "command": "mergeguard.setGitLabPat",
+        "title": "Set GitLab PAT",
+        "category": "MergeGuard"
+      },
+      {
+        "command": "mergeguard.setBitbucketCredentials",
+        "title": "Set Bitbucket Credentials",
+        "category": "MergeGuard"
+      },
+      {
+        "command": "mergeguard.setAzureDevOpsPat",
+        "title": "Set Azure DevOps PAT",
+        "category": "MergeGuard"
       }
     ],
     "viewsContainers": {

@@ -24,7 +24,7 @@ import {
   registerSCMProviderFactory,
   createSCMProvider,
 } from './scm/provider';
-import type { SCMProvider } from './scm/provider';
+import type { SCMProvider, SCMType } from './scm/provider';
 import { createGitHubProvider } from './scm/github';
 import { createGitLabProvider } from './scm/gitlab';
 import { createBitbucketProvider } from './scm/bitbucket';
@@ -527,6 +527,41 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       vscode.window.showInformationMessage(msg);
       logger.info(`Filter mode: ${next}.`);
     }),
+  );
+
+  // SCM credential commands
+  const authenticateSCM = async (type: SCMType, displayName: string): Promise<void> => {
+    const provider = scmProvider;
+
+    if (!provider || provider.type !== type) {
+      vscode.window.showErrorMessage(
+        vscode.l10n.t(
+          'MergeGuard: Current repository is not a {0} repository.',
+          displayName,
+        ),
+      );
+      return;
+    }
+
+    const authenticated = await provider.authenticate();
+
+    if (authenticated) {
+      vscode.window.showInformationMessage(
+        vscode.l10n.t('MergeGuard: {0} credentials saved.', displayName),
+      );
+    }
+  };
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('mergeguard.setGitLabPat', () =>
+      authenticateSCM('gitlab', 'GitLab'),
+    ),
+    vscode.commands.registerCommand('mergeguard.setBitbucketCredentials', () =>
+      authenticateSCM('bitbucket', 'Bitbucket'),
+    ),
+    vscode.commands.registerCommand('mergeguard.setAzureDevOpsPat', () =>
+      authenticateSCM('azureDevops', 'Azure DevOps'),
+    ),
   );
 
   // ── PR-aware scanning & team awareness ───────
