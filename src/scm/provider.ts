@@ -103,8 +103,23 @@ export function parseRemoteUrl(url: string): RemoteInfo | undefined {
   const parts = path.split('/');
   if (parts.length < 2) return undefined;
 
-  const owner = parts[0];
-  const repo = parts[1];
+  // GitLab supports nested group paths (e.g., group/subgroup/project).
+  // For GitLab and self-hosted instances, the last component is the repo,
+  // and everything before it is the owner (which may contain slashes).
+  const isGitLabLike = host === 'gitlab.com' || host.startsWith('git.') || host.endsWith('.gitlab.com');
+
+  let owner: string;
+  let repo: string;
+
+  if (isGitLabLike && parts.length > 2) {
+    // Nested group path: join all but the last part for owner
+    repo = parts[parts.length - 1];
+    owner = parts.slice(0, -1).join('/');
+  } else {
+    // Standard two-level path for other platforms
+    owner = parts[0];
+    repo = parts[1];
+  }
 
   if (host === 'github.com') {
     return { type: 'github', owner, repo, apiBase: 'https://api.github.com' };

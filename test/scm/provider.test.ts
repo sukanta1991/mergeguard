@@ -59,6 +59,36 @@ describe('parseRemoteUrl', () => {
     });
   });
 
+  it('parses GitLab nested group path HTTPS URL', () => {
+    const info = parseRemoteUrl('https://gitlab.com/team/cloud/mergeguard.git');
+    expect(info).toEqual({
+      type: 'gitlab',
+      owner: 'team/cloud',
+      repo: 'mergeguard',
+      apiBase: 'https://gitlab.com/api/v4',
+    });
+  });
+
+  it('parses GitLab nested group path SSH URL', () => {
+    const info = parseRemoteUrl('git@gitlab.com:team/cloud/mergeguard.git');
+    expect(info).toEqual({
+      type: 'gitlab',
+      owner: 'team/cloud',
+      repo: 'mergeguard',
+      apiBase: 'https://gitlab.com/api/v4',
+    });
+  });
+
+  it('parses GitLab deeply nested group path', () => {
+    const info = parseRemoteUrl('https://gitlab.com/platform/team/backend/api-gateway.git');
+    expect(info).toEqual({
+      type: 'gitlab',
+      owner: 'platform/team/backend',
+      repo: 'api-gateway',
+      apiBase: 'https://gitlab.com/api/v4',
+    });
+  });
+
   it('parses Bitbucket HTTPS URL', () => {
     const info = parseRemoteUrl('https://bitbucket.org/owner/repo.git');
     expect(info).toEqual({
@@ -79,12 +109,23 @@ describe('parseRemoteUrl', () => {
     });
   });
 
-  it('returns unknown for self-hosted URLs', () => {
+  it('parses self-hosted GitLab URL (git.* pattern)', () => {
     const info = parseRemoteUrl('https://git.example.com/team/project.git');
     expect(info).toBeDefined();
-    expect(info!.type).toBe('unknown');
+    expect(info!.type).toBe('gitlab');
     expect(info!.owner).toBe('team');
     expect(info!.repo).toBe('project');
+    expect(info!.apiBase).toBe('https://git.example.com/api/v4');
+  });
+
+  it('parses self-hosted GitLab nested group path', () => {
+    const info = parseRemoteUrl('https://git.example.com/team/subgroup/project.git');
+    expect(info).toEqual({
+      type: 'gitlab',
+      owner: 'team/subgroup',
+      repo: 'project',
+      apiBase: 'https://git.example.com/api/v4',
+    });
   });
 
   it('returns undefined for invalid URLs', () => {
