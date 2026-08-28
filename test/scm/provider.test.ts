@@ -128,6 +128,14 @@ describe('parseRemoteUrl', () => {
     });
   });
 
+  it('returns unknown for non-gitlab-like self-hosted URLs', () => {
+    const info = parseRemoteUrl('https://example.com/team/project.git');
+    expect(info).toBeDefined();
+    expect(info!.type).toBe('unknown');
+    expect(info!.owner).toBe('team');
+    expect(info!.repo).toBe('project');
+  });
+
   it('returns undefined for invalid URLs', () => {
     expect(parseRemoteUrl('not-a-url')).toBeUndefined();
   });
