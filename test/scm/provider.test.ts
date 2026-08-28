@@ -109,6 +109,7 @@ describe('createSCMProvider / registerSCMProviderFactory', () => {
     const mockProvider: SCMProvider = {
       type: 'github' as SCMType,
       isAuthenticated: async () => true,
+      authenticate: async () => true,
       getOpenPRs: async () => [],
       getPRBranches: async () => [],
       getPRMetadata: async () => undefined,

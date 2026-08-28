@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import * as vscode from 'vscode';
 import { AzureDevOpsProvider, createAzureDevOpsProvider } from '../../src/scm/azureDevops';
 
 // Mock fetch globally
@@ -53,6 +54,17 @@ describe('AzureDevOpsProvider', () => {
   it('isAuthenticated returns true when token is stored', async () => {
     mockSecrets.get.mockResolvedValue('my-pat-token');
     expect(await provider.isAuthenticated()).toBe(true);
+  });
+
+  it('authenticate stores token entered via input box', async () => {
+    vi.spyOn(vscode.window, 'showInputBox').mockResolvedValueOnce('new-pat');
+    expect(await provider.authenticate()).toBe(true);
+    expect(mockSecrets.store).toHaveBeenCalledWith(expect.any(String), 'new-pat');
+  });
+
+  it('authenticate returns false when input is cancelled', async () => {
+    vi.spyOn(vscode.window, 'showInputBox').mockResolvedValueOnce(undefined);
+    expect(await provider.authenticate()).toBe(false);
   });
 
   it('getOpenPRs fetches and maps PRs correctly', async () => {

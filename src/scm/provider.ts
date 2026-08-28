@@ -46,6 +46,9 @@ export interface SCMProvider {
   /** Whether the provider is currently authenticated. */
   isAuthenticated(): Promise<boolean>;
 
+  /** Prompt the user for authentication and store credentials securely. */
+  authenticate(): Promise<boolean>;
+
   /** Get all open PRs for the repository. */
   getOpenPRs(): Promise<PR[]>;
 
