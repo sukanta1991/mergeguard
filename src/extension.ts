@@ -533,15 +533,18 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   const authenticateSCM = async (type: SCMType, displayName: string): Promise<void> => {
     const provider = scmProvider;
 
-    if (!provider || provider.type !== type) {
-      vscode.window.showErrorMessage(
-        vscode.l10n.t(
-          'MergeGuard: Current repository is not a {0} repository.',
-          displayName,
-        ),
-      );
-      return;
-    }
+    if (!provider) {
+    vscode.window.showErrorMessage(
+        vscode.l10n.t('MergeGuard: No remote repository detected.')
+    );
+    return;
+}
+if (provider.type !== type) {
+    vscode.window.showErrorMessage(
+        vscode.l10n.t('MergeGuard: Current repository is not a {0} repository.', displayName)
+    );
+    return;
+}
 
     const authenticated = await provider.authenticate();
 
