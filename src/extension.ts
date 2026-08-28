@@ -534,23 +534,32 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     const provider = scmProvider;
 
     if (!provider) {
-    vscode.window.showErrorMessage(
+      vscode.window.showErrorMessage(
         vscode.l10n.t('MergeGuard: No remote repository detected.')
-    );
-    return;
-}
-if (provider.type !== type) {
-    vscode.window.showErrorMessage(
+      );
+      return;
+    }
+    if (provider.type !== type) {
+      vscode.window.showErrorMessage(
         vscode.l10n.t('MergeGuard: Current repository is not a {0} repository.', displayName)
-    );
-    return;
-}
+      );
+      return;
+    }
 
-    const authenticated = await provider.authenticate();
+    try {
+      const authenticated = await provider.authenticate();
 
-    if (authenticated) {
-      vscode.window.showInformationMessage(
-        vscode.l10n.t('MergeGuard: {0} credentials saved.', displayName),
+      if (authenticated) {
+        vscode.window.showInformationMessage(
+          vscode.l10n.t('MergeGuard: {0} credentials saved.', displayName),
+        );
+      }
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        vscode.l10n.t(
+          'MergeGuard: Failed to save credentials — {0}',
+          err instanceof Error ? err.message : String(err)
+        )
       );
     }
   };
