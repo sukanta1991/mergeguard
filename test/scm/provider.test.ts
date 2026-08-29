@@ -59,6 +59,36 @@ describe('parseRemoteUrl', () => {
     });
   });
 
+  it('parses GitLab nested group path HTTPS URL', () => {
+    const info = parseRemoteUrl('https://gitlab.com/owner/team/repo.git');
+    expect(info).toEqual({
+      type: 'gitlab',
+      owner: 'owner/team',
+      repo: 'repo',
+      apiBase: 'https://gitlab.com/api/v4',
+    });
+  });
+
+  it('parses GitLab nested group path SSH URL', () => {
+    const info = parseRemoteUrl('git@gitlab.com:owner/team/repo.git');
+    expect(info).toEqual({
+      type: 'gitlab',
+      owner: 'owner/team',
+      repo: 'repo',
+      apiBase: 'https://gitlab.com/api/v4',
+    });
+  });
+
+  it('parses GitLab deeply nested group path', () => {
+    const info = parseRemoteUrl('https://gitlab.com/owner/team/cloud/backend/project.git');
+    expect(info).toEqual({
+      type: 'gitlab',
+      owner: 'owner/team/cloud/backend',
+      repo: 'project',
+      apiBase: 'https://gitlab.com/api/v4',
+    });
+  });
+
   it('parses Bitbucket HTTPS URL', () => {
     const info = parseRemoteUrl('https://bitbucket.org/owner/repo.git');
     expect(info).toEqual({
@@ -80,7 +110,7 @@ describe('parseRemoteUrl', () => {
   });
 
   it('returns unknown for self-hosted URLs', () => {
-    const info = parseRemoteUrl('https://git.example.com/team/project.git');
+    const info = parseRemoteUrl('https://example.com/team/project.git');
     expect(info).toBeDefined();
     expect(info!.type).toBe('unknown');
     expect(info!.owner).toBe('team');

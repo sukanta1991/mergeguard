@@ -106,8 +106,17 @@ export function parseRemoteUrl(url: string): RemoteInfo | undefined {
   const parts = path.split('/');
   if (parts.length < 2) return undefined;
 
-  const owner = parts[0];
-  const repo = parts[1];
+  let repo: string;
+  let owner: string;
+
+  if (host === 'gitlab.com') {
+    // Nested group path: join all but the last part for owner
+    owner = parts.slice(0, -1).join('/');
+    repo = parts[parts.length - 1];
+  } else {
+    owner = parts[0];
+    repo = parts[1];
+  }
 
   if (host === 'github.com') {
     return { type: 'github', owner, repo, apiBase: 'https://api.github.com' };
